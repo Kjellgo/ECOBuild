@@ -96,10 +96,13 @@ while running:
 
             # Überprüfen auf Zusammenführung der Häuser
             for house in additional_houses:
-                if house.rect.colliderect(house in additional_houses) or house.rect.colliderect(house in additional_houses):
-                    new_villa = Villa(start_house1, start_house2)
-                    villas.append(new_villa)
-                    additional_houses.remove(house)
+                for tester in additional_houses:
+                    if tester != house:
+                        if house.rect.colliderect(tester):
+                            new_villa = Villa()
+                            villas.append(new_villa)
+                            additional_houses.remove(house)
+                            break
                     break
 
         elif event.type == pygame.MOUSEMOTION:
