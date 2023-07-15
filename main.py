@@ -8,6 +8,11 @@ import pygame as pg
 if not pg.image.get_extended():
     raise SystemExit("Sorry, extended image module required")
 
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 450
+screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+SCREENRECT = pg.Rect(0, 0, 640, 480)
+
 #Konstanten
 
 TAXES_XSMALL = 20 #XSmall house taxes
@@ -40,5 +45,15 @@ def load_sound(file):
 
 class House(pg.sprite.Sprite):
     def __init__(self, size: int = 1, *groups):
+        pg.sprite.Sprite.__init__(self, *groups)
+        self.image = self.images[0]
+        self.rect = self.image.get_rect()
+        self.frame = 0
+        if self.facing < 0:
+            self.rect.right = SCREENRECT.right
+    def create(self):
+        IMAGE = pg.image.load("house_test.png").convert()
+        rect = IMAGE.get_rect()
+        rect.center = (64,64)
 
 
