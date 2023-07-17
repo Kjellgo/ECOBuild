@@ -49,7 +49,7 @@ start_house1 = House(WIDTH // 2 - house_image.get_width(), HEIGHT // 2 - house_i
 start_house2 = House(WIDTH // 2, HEIGHT // 2 - house_image.get_height())
 
 # Liste zum Speichern der zusätzlichen Häuser und Villen
-additional_houses = [start_house1, start_house2]
+houses = [start_house1, start_house2]
 villas = []
 
 # Button erstellen
@@ -66,13 +66,8 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            # Prüfen, ob das Mausereignis innerhalb des Start-Hauses stattfindet
-            if start_house1.rect.collidepoint(event.pos):
-                start_house1.dragging = True
-            elif start_house2.rect.collidepoint(event.pos):
-                start_house2.dragging = True
             # Prüfen, ob das Mausereignis innerhalb eines zusätzlichen Hauses stattfindet
-            for house in additional_houses:
+            for house in houses:
                 if house.rect.collidepoint(event.pos):
                     house.dragging = True
             # Prüfen, ob das Mausereignis innerhalb einer Villa stattfindet
@@ -84,36 +79,28 @@ while running:
                 x = pygame.mouse.get_pos()[0]
                 y = pygame.mouse.get_pos()[1]
                 new_house = House(x, y)
-                additional_houses.append(new_house)
+                houses.append(new_house)
         elif event.type == pygame.MOUSEBUTTONUP:
             # Beenden des Ziehens aller Häuser und Villen
-            start_house1.dragging = False
-            start_house2.dragging = False
-            for house in additional_houses:
+            for house in houses:
                 house.dragging = False
             for villa in villas:
                 villa.dragging = False
 
             # Überprüfen auf Zusammenführung der Häuser
-            for house in additional_houses:
-                for tester in additional_houses:
+            for house in houses:
+                for tester in houses:
                     if tester != house:
                         if house.rect.colliderect(tester):
                             new_villa = Villa()
                             villas.append(new_villa)
-                            additional_houses.remove(house)
+                            houses.remove(house)
                             break
                     break
 
         elif event.type == pygame.MOUSEMOTION:
             # Häuser und Villen verschieben, wenn sie gezogen werden
-            if start_house1.dragging:
-                start_house1.rect.x += event.rel[0]
-                start_house1.rect.y += event.rel[1]
-            if start_house2.dragging:
-                start_house2.rect.x += event.rel[0]
-                start_house2.rect.y += event.rel[1]
-            for house in additional_houses:
+            for house in houses:
                 if house.dragging:
                     house.rect.x += event.rel[0]
                     house.rect.y += event.rel[1]
@@ -126,7 +113,7 @@ while running:
     window.fill(GREEN)
 
     # Zusätzliche Häuser zeichnen
-    for house in additional_houses:
+    for house in houses:
         house.draw(window)
 
     # Villen zeichnen
